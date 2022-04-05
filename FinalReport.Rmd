@@ -134,6 +134,9 @@ The numerical results of this test include the confidence intervals as well as t
 
 Clearly, multiple manner of collision combinations do in fact have sufficient evidence showing that crash severity differs between the two. In addition, many manner of collision combinations do not differ between each other, showing no evidence that crash severity differs between the two. Fortunately, a more inferential conclusions is interpretted from the numerical analysis in the following section. 
 
+### Logistic Regression
+
+
 # Inferential Conclusions
 
 The inferential conclusions from our analysis can be interpreted through the numerical results that were presented. Specifically, the mean and standard deviation table, box plot, ANOVA table, and Tukey-Kramer results provide sufficient evidence to formulate inferential conclusions. 

@@ -11,14 +11,20 @@ crashprep <- function() {
   rollups <- check_rollups(rollups)
   aadt <- check_aadt(aadt)
 
-  
   crash <- left_join(location,rollups,by='crash_id')
-  crash <- left_join(crash,vehicle,by='crash_id')
-  crash <- left_join(crash, aadt, by = 'route')
+  crash <- left_join(crash,vehicle,by='crash_id') %>%
+    filter(county_id == 49)
+  crash <- left_join(crash, aadt, by=c('route')) %>%
+    filter(milepoint >= START_ACCU, milepoint < END_ACCUM)
   rm("location","vehicle","rollups", "aadt")
   
   crash
 }
+
+# 
+# testjoin <- left_join(testaadt, testcrash, by=c('route')) %>%
+#   filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>%
+#   select(crash_id, route, milepoint, START_ACCU, END_ACCUM)
 
 #build severity dataset
 buildSeverity <- function(crashData) {

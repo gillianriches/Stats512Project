@@ -10,9 +10,9 @@ check_location <- function(df){
            weather_condition_id = weather_condition_id, 
            manner_collision_id = manner_collision_id,
            roadway_surf_condition_id = roadway_surf_condition_id,
-           roadway_junct_feature_id = roadway_junct_feature_id, 
-           roadway_contrib_circum_id = roadway_contrib_circum_id,
-           route = route)
+           route = route,
+           milepoint = milepoint,
+           county_id = county_id)
 }
 
 # Keeps the following columns from the vehicle file
@@ -22,10 +22,6 @@ check_vehicle <- function(df){
            vehicle_num = vehicle_num, 
            vehicle_year = vehicle_year,
            travel_direction_id = travel_direction_id, 
-           event_1_id = event_sequence_1_id, 
-           event_2_id = event_sequence_2_id, 
-           event_3_id = event_sequence_3_id, 
-           event_4_id = event_sequence_4_id,
            most_harmful_event_id = most_harmful_event_id, 
            vehicle_maneuver_id = vehicle_maneuver_id)
 }
