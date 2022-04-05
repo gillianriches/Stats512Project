@@ -30,17 +30,17 @@ crashprep <- function() {
   crash
 }
 
-testgrp <- testjoin %>% 
-  mutate(AADT = case_when(
-    grepl("2017",crash_datetime) == TRUE ~ AADT2017,
-    grepl("2018",crash_datetime) == TRUE ~ AADT2018
-  ))
-  
-
+# testgrp <- testjoin %>% 
+#   mutate(AADT = case_when(
+#     grepl("2017",crash_datetime) == TRUE ~ AADT2017,
+#     grepl("2018",crash_datetime) == TRUE ~ AADT2018
+#   ))
+#   
 # 
- testjoin <- left_join(testcrash, testaadt, by=c('route')) %>%
-   filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>%
-   select(crash_id, route, milepoint, START_ACCU, END_ACCUM)
+# # 
+#  testjoin <- left_join(testcrash, testaadt, by=c('route')) %>%
+#    filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>%
+#    select(crash_id, route, milepoint, START_ACCU, END_ACCUM)
 
 #build severity dataset
 buildSeverity <- function(crashData) {
