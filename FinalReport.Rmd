@@ -164,9 +164,9 @@ mosaicplot(fish, main = "Head On Collisions vs Severity", color=TRUE)
 
 # Inferential Conclusions
 
-The inferential conclusions from our analysis can be interpreted through the numerical results that were presented. Specifically, the mean and standard deviation table, box plot, ANOVA table, and Tukey-Kramer results provide sufficient evidence to formulate inferential conclusions. 
+The inferential conclusions from our analysis can be interpreted through the numerical results that were presented. Specifically, the mean and standard deviation table, box plot, ANOVA table, Tukey-Kramer, Logisitic Regression, and Fisher's Test results provide sufficient evidence to formulate inferential conclusions. 
 
-Below, three specific inferential conclusions drawn from the data are stated and then explained. In addition, an overarching conclusion is drawn.
+Below, six specific inferential conclusions drawn from the data are stated and then explained. In addition, an overarching conclusion is drawn.
 
 ### 1. On average, some collision types produce more severe crashes.
 
@@ -180,15 +180,21 @@ This conclusion is backed up by the results in the ANOVA table and the Tukey-Kra
 
 Another inference that is made is that Head On, Angle, and Single Vehicle crashes will more likely produce a more severe crash than a collision involving a Parked Vehicle, Rear to Side, or Rear to Rear type. The mean severitys between all of these combinations is significanly different. This is shown in the p-values displayed in the Tukey-Kramer test. In addition, Head On, Angle, and Single Vehicle crashes have the highest average crash severity whereas Parked Vehicle, Rear to Side, and Rear to Rear collisions have the lowest average crash severity. This is shown in the Box Plots and in Table 1.
 
+This inference is also backed up by analyzing the results of the Fisher's Exact Test. Looking at the odds ratio of 2.9324, with a 95% confidence interval from 2.67 to 3.21, there is a much higher odds of getting into a severe car crash if your collision was head-on than if it was not. This is backed up by analyzing the mosaic plot. Although there is a greater total number of severe crashes that are not Head on compared to those that are, percentage wise there are more severe crashes when it is a Head On collision.
+
 ### 3. On average, some collision types produce less severe crashes.
 
 Although very similar to the first conclusional inference that was made, here we infer that on average, specific collision types produce less severe crashes than other collision types. Again, by looking at Table 1 and Figure 4, we see that Parked Vehicle, Rear to Rear, and Rear to Side collisions seem to have lower crash severity means than all the other collision types. Rear to Side collisions in particular seem to have the lowest average crash severity level. This means taht in the data that was collected, crash intensity was on average lowest amoung Rear to Side data points.
 
 This inference does not conclude that Rear to Side collisions are always the least severe. It does conclude, however, that the average severity of Parked Vehicle, Rear to Rear, and Rear to Side collisions are lower than all other collision types. Similar to the first conclusion, this inference is backed up by the results in the ANOVA table and the Tukey-Kramer test.
 
-### 4. A connection exists between manner of collision and crash severity.
+### 4. AADT, manner of collision, and some weather conditions play a role in predicting crash severity.
 
-The overarching conclusion we make, however, is that *a connection exists between manner of collision and crash severity.* Drawing from specific conclusions, we see that on average, some collision types produce more sever crashes and some collision types produce less severe crashes. We also see that certain collision types are more likely to produce a more severe crash. Overall though, it is clear to see that some sort of valid connection exists between collision type and crash severity. This conclusion is backed up specifically by the results of the ANOVA table. There is a difference in crash severity means, and no debate exists about that.
+In order to predict the crash severity, a logistic regression model was developed using AADT, manner of collision, weather conditions, and light conditions are predictors. The results of the logistic regression show that indeed AADT and manner of collision do play a significan role in predicting severity. Most of these values had p-values less than 2e-16. Only some weather conditions were significant predictors. The weather conditions of Rain, Snowing, Blowing Snow, and Severe Crosswinds all were significant predictors in predicting crash severity. This makes sense as all these conditions make driving significantly more difficult. Lastly, lighting conditions was determined to be an insignificant predictor, meaning it does not play a role in determining a crash severity prediction.
+
+### A connection exists between manner of collision and crash severity.
+
+The overarching conclusion we make, however, is that *a connection exists between manner of collision and crash severity.* Drawing from specific conclusions, we see that on average, some collision types produce more sever crashes and some collision types produce less severe crashes. We also see that certain collision types are more likely to produce a more severe crash. We also see that AADT volumes and some weather conditions play a role in predicting crash severity. Overall though, it is clear to see that some sort of valid connection exists between collision type and crash severity. This conclusion is backed up specifically by the results of the ANOVA table. There is a difference in crash severity means, and no debate exists about that.
 
 # Additional Discussion
 The application of this study would be helping UDOT achieve their goal of Zero Fatalities on Utah Roadways and creating safer roadways to prevent manner of collisions that may result in more severe or fatal crashes. If roadway data was added into this statistical analysis, you could potentially analyze specific segments or intersections and the crashes in them.
