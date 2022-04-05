@@ -212,7 +212,7 @@ Gillian- Statistical Methods, Issues, ANOVA Code, Regression Code
 Chris- Numerical Results, Inferential Conclusions, BoxPlot Code, Fisher's Code
 
 # Appendix
-For more information on the design of this project, please see this github page: https://github.com/cday97/Stats511Project.
+For more information on the design of this project, please see this github page: https://github.com/gillianriches/Stats512Project.
 
 Below are the scripts that correspond to the datamaker.R script
 ```{r}
