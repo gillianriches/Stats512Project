@@ -136,6 +136,31 @@ Clearly, multiple manner of collision combinations do in fact have sufficient ev
 
 ### Logistic Regression
 
+```{r LogReg, echo=TRUE, warning=FALSE, message=FALSE}
+lr <- glm(crash_severity_id ~ 
+            AADT + 
+            as.factor(manner_collision_id) + 
+            as.factor(weather_condition_id) + 
+            as.factor(light_condition_id),
+          data = crash)
+summary(lr)
+```
+### Fisher's Exact Test
+
+```{r fish, echo=TRUE, message=FALSE, warning=FALSE}
+fishcrash <- crash %>% mutate(IsHeadOn = ifelse(manner_collision_id == 3,1,0), Severe = ifelse(crash_severity_id %in% c(3,4,5),1,0)) %>% group_by(IsHeadOn, Severe) %>% summarize(Sum = n())
+fish <- data.frame(
+  "Head On" = c(683,1687),
+  "Not Head On" = c(13103, 94906),
+  row.names = c("Severe", "Non-Severe"),
+  stringsAsFactors = F
+)
+colnames(fish) <- c ("Head On", "Not Head On")
+fish
+fisher.test(fish, alternative = "two.sided")
+mosaicplot(fish, main = "Head On Collisions vs Severity", color=TRUE)
+```
+
 
 # Inferential Conclusions
 

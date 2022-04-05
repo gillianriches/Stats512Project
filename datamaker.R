@@ -15,16 +15,32 @@ crashprep <- function() {
   crash <- left_join(crash,vehicle,by='crash_id') %>%
     filter(county_id == 49)
   crash <- left_join(crash, aadt, by=c('route')) %>%
-    filter(milepoint >= START_ACCU, milepoint < END_ACCUM)
+    filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>% 
+    mutate(AADT = case_when(
+      grepl("2014",crash_datetime) == TRUE ~ AADT2014,
+      grepl("2015",crash_datetime) == TRUE ~ AADT2015,
+      grepl("2016",crash_datetime) == TRUE ~ AADT2016,
+      grepl("2017",crash_datetime) == TRUE ~ AADT2017,
+      grepl("2018",crash_datetime) == TRUE ~ AADT2018,
+      grepl("2019",crash_datetime) == TRUE ~ AADT2019,
+      grepl("2020",crash_datetime) == TRUE ~ AADT2020
+    ))
   rm("location","vehicle","rollups", "aadt")
   
   crash
 }
 
+testgrp <- testjoin %>% 
+  mutate(AADT = case_when(
+    grepl("2017",crash_datetime) == TRUE ~ AADT2017,
+    grepl("2018",crash_datetime) == TRUE ~ AADT2018
+  ))
+  
+
 # 
-# testjoin <- left_join(testaadt, testcrash, by=c('route')) %>%
-#   filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>%
-#   select(crash_id, route, milepoint, START_ACCU, END_ACCUM)
+ testjoin <- left_join(testcrash, testaadt, by=c('route')) %>%
+   filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>%
+   select(crash_id, route, milepoint, START_ACCU, END_ACCUM)
 
 #build severity dataset
 buildSeverity <- function(crashData) {
