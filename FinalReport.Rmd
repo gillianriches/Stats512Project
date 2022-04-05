@@ -166,7 +166,7 @@ mosaicplot(fish, main = "Head On Collisions vs Severity", color=TRUE)
 
 The inferential conclusions from our analysis can be interpreted through the numerical results that were presented. Specifically, the mean and standard deviation table, box plot, ANOVA table, Tukey-Kramer, Logisitic Regression, and Fisher's Test results provide sufficient evidence to formulate inferential conclusions. 
 
-Below, six specific inferential conclusions drawn from the data are stated and then explained. In addition, an overarching conclusion is drawn.
+Below, four specific inferential conclusions drawn from the data are stated and then explained. In addition, an overarching conclusion is drawn.
 
 ### 1. On average, some collision types produce more severe crashes.
 
