@@ -152,6 +152,8 @@ Clearly, multiple manner of collision combinations do in fact have sufficient ev
 
 ### Logistic Regression
 
+By combining the crash data with AADT data we can perform a logistic regression and test whether different factor such a AADT, manner of collision, weather condtion, and light condition have an effect on the severity of a crash.
+
 ```{r LogReg, echo=TRUE, warning=FALSE, message=FALSE}
 lr <- glm(crash_severity_id ~ 
             AADT + 
@@ -161,6 +163,8 @@ lr <- glm(crash_severity_id ~
           data = crash)
 summary(lr)
 ```
+
+From these results we can see that AADT, all manner of collisions, some weather conditions and no light conditions have an effect on the severity of crashes. The specific factor which influence severity can be seen from the results which show each of the factors that have a p-value below the significant level. Because light condition and not all weather conditions had an effect on severity a more in-depth analysis will be conducted regarding head on crashes and its effect on severity.
 
 ### Fisher's Exact Test
 
@@ -181,6 +185,8 @@ fisher.test(fish, alternative = "two.sided")
 mosaicplot(fish, main = "Head On Collisions vs Severity", color=TRUE)
 ```
 
+By summarizing the data we can see the total number of severe, non-severe, severe head on, and non-severe head on crashes. With the new data set up we can conduct Fisher's exact test to see the odds of a head-on manner of collision resulting in a severe crash versus any other manner of collision. A mosaic plot was also created to show if this inference might have any basis and from the plot we can see that it does appear there is a greater proportion of severe crashes resulting from head on collisions. The Fisher's exact test will show us if this hypothesis is valid. From these results we can see that a head-on crashes is 2.93 times more likely to be a severe crash than any other manner of collision with a 95% confidence interval of 2.67 to 3.21. Following these results another analysis will be conducted to further provide evidence to support the conclusion.
+
 ### Chi-Squared Test
 
 ```{r}
@@ -188,6 +194,8 @@ chisq <- chisq.test(fish, correct = F)
 chisq$expected
 chisq
 ```
+
+The Chi-squared test was conducted on the summarized data to see if the results from previous analysis were significant. From the p-value we can see that the results are significant. We can conclude that the results from Fisher's test were also significant and therefore odds of a head on collision being severe is 3 times that of any other manner of collision.
 
 # Inferential Conclusions
 
