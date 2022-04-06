@@ -13,7 +13,7 @@ crashprep <- function() {
 
   crash <- left_join(location,rollups,by='crash_id')
   crash <- left_join(crash,vehicle,by='crash_id') %>%
-    filter(county_id == 49)
+     filter(county_id == 49)
   crash <- left_join(crash, aadt, by=c('route')) %>%
     filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>% 
     mutate(AADT = case_when(

@@ -62,8 +62,7 @@ check_aadt <- function(df){
            AADT2017 = AADT2017,
            AADT2016 = AADT2016,
            AADT2015 = AADT2015,
-           AADT2014 = AADT2014,
-           DESC_ = DESC_)
+           AADT2014 = AADT2014)
 }
 
 
