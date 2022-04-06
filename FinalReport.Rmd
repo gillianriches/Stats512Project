@@ -71,7 +71,19 @@ Using the one-way ANOVA method in our analysis will allow us to see if the mean 
 
 The Tukey-Kramer procedure, as the textbook states, utilizes "the unique structure of the multiple comparisons problem by selecting a multiplier from the studentized range distributions rather than from the t-distributions" (Ramsey/Schafer, 2013, p.161). In simpler terms, it compares the means of every treatment to the means of every other treatment and identifies any difference between two means that is greater than the expected standard error. This is useful for our question because it will tell us specifically which manners of collision have statistically different means of severity.
 
-# Issues
+### Logistic Regression
+
+Logistic regression is a process of modeling the probability of a discrete outcome given input variables whereas linear regression which models the probability of continuous outcomes. Logistic regression also requires does not require a linear relationship between inputs and output variables due to the application of a nonlinear log transformation to the odds ratio. In the case of our research question, the response variable, severity of the crash, is a discrete variable where the severity is measured on a scale from 1 to 5. Therefore, logistic regression should be used in this case to see which variables have a significant impact on the severity of a crash, or which variables have a significant p-value in the logistic regression model.
+
+### Fisher's Exact Test
+
+According to Wolfram MathWorld, "Fisher's Exact Test is a statistical test used to determine if there are nonrandom associations between two categorical variables." The p-value from Fisher's Exact Test corresponds to the proportion of values of the test statistic that are as extreme or more extreme than the observed value of that test statistic. The null hypothesis for Fisher's test is that the two classification variables are not different.
+
+### Chi-Squared Test
+
+The chi-squared test determines whether there is a statistically significant difference between the expected frequencies and the observed frequencies of a table. It also tells whether two variables are independent of one another. It is similar to the Fisher's test, except it requires a larger sample size, specifically at least 5 observations or more. The chi-squared test also assumes that the observations are independent, which in our case, they are since each crash is an independent event of another.The null hypothesis and p-values are interpreted very similarly to Fisher's test, and it also gives an X^2 value which is the measure of the difference between the observed and expected frequencies.
+
+# Issues/ Limitations
 
 There are pros and cons to each type of statistical method we are using in our analysis. The box-plot is helpful because it quickly gives the researcher an initial glance at the distribution of the data and get an idea for which groups may be significantly different from one another. They also can indicate if a transformation may be needed if the spreads of data between groups are hugely different from each other. The major issue with boxplots is that it doesn't prove anything statistically. Even if the medians or distributions look different from each other, there is no p-value to tell whether or not the means are significantly different from each other or not. Along with that, box plots do a better job at showing the medians than the means, which is not always what the researcher is interested in.
 
@@ -79,10 +91,14 @@ These weaknesses with boxplots is what lead my group to decide to do an ANOVA te
 
 This is why our group also did a post-hoc test, in this case Tukey-Kramer. The pros of Tukey-Kramer is it highlights eactly where the differences in means do and do not occur. Some of the issues that come with Tukey-Kramer is that the confidence interval is wider than other methods such as Scheffe, and it is less powerful when testing small numbers of means. However, we still think it provides an adequate analysis of our data and we are not as concerned with the confidence interval. Furthermore, all of the assumptions of Tukey-Kramer were met: normality, homogeneity of variance, and independent observations. 
 
+The chi-squared test applies an approximation assuming that the sample is large whereas Fisher's exact test runs an exact procedure for small-sized samples. Therefore, in our analysis, after figuring out how large the sample size was in the Fisher's test, we also decided to perform a chi-squared test to confirm that the overall results were consistent and/or accurate.
+
+One general limitation that we ran into during our analysis was when we appended the annual average daily travel dataset onto the crash data. The problem was that it gave over 30,000,000 observations and that vector was too large to work in within R Studio. Therefore, for our logistic regression analysis, Fisher's exact test, and chi-squared test, we filtered the data set to be within only Provo and Orem counties only (county ID = 49). This can be seen in the appendix of this report where we include the scrips that we wrote to import and clean the crash data we used for our analyses.
+
 # Numerical Results
 
 We conducted an array of statistical tests to help us determine if the
-severity of a crash can be directly associated with the manner of the collision that occured during a crash. One cannot simply assume that certain types of collisions will automatically result in certain severity. As stated in the Statistical Method section, the tests we conducted include a comparison of means and standard deviations, a boxplot, an ANOVA test, and a Tukey-Kramer analysis. The numerical results of each of these tests are displayed in the following subsections.
+severity of a crash can be directly associated with the manner of the collision that occurred during a crash. One cannot simply assume that certain types of collisions will automatically result in certain severity. As stated in the Statistical Method section, the tests we conducted include a comparison of means and standard deviations, a boxplot, an ANOVA test, and a Tukey-Kramer analysis. The numerical results of each of these tests are displayed in the following subsections.
 
 ### Comparison of Means and Standard Deviations
 
@@ -132,7 +148,7 @@ tukey
 
 The numerical results of this test include the confidence intervals as well as the p-value for each combination of manner of collision. More specifically, all combinations that result in a p adj value of 0, or less than 0.05 are to be considered statistically significant. In other words, the null-hypothesis is rejected and there is substantial evidence that the severity level means differ between the two manner of collisions. An exampe of this is HeadOn collision types. The mean severity level of HeadOn collisions is significantly different than all other collision type mean severity levels. Combinations of values greater than 0.05 show that there is no difference between mean severity levels.
 
-Clearly, multiple manner of collision combinations do in fact have sufficient evidence showing that crash severity differs between the two. In addition, many manner of collision combinations do not differ between each other, showing no evidence that crash severity differs between the two. Fortunately, a more inferential conclusions is interpretted from the numerical analysis in the following section. 
+Clearly, multiple manner of collision combinations do in fact have sufficient evidence showing that crash severity differs between the two. In addition, many manner of collision combinations do not differ between each other, showing no evidence that crash severity differs between the two. Fortunately, a more inferential conclusions is interpreted from the numerical analysis in the following section. 
 
 ### Logistic Regression
 
@@ -145,10 +161,14 @@ lr <- glm(crash_severity_id ~
           data = crash)
 summary(lr)
 ```
+
 ### Fisher's Exact Test
 
 ```{r fish, echo=TRUE, message=FALSE, warning=FALSE}
-fishcrash <- crash %>% mutate(IsHeadOn = ifelse(manner_collision_id == 3,1,0), Severe = ifelse(crash_severity_id %in% c(3,4,5),1,0)) %>% group_by(IsHeadOn, Severe) %>% summarize(Sum = n())
+fishcrash <- crash %>% 
+  mutate(IsHeadOn = ifelse(manner_collision_id == 3,1,0), 
+         Severe = ifelse(crash_severity_id %in% c(3,4,5),1,0)) %>%
+  group_by(IsHeadOn, Severe) %>% summarize(Sum = n())
 fish <- data.frame(
   "Head On" = c(683,1687),
   "Not Head On" = c(13103, 94906),
@@ -161,6 +181,13 @@ fisher.test(fish, alternative = "two.sided")
 mosaicplot(fish, main = "Head On Collisions vs Severity", color=TRUE)
 ```
 
+### Chi-Squared Test
+
+```{r}
+chisq <- chisq.test(fish, correct = F)
+chisq$expected
+chisq
+```
 
 # Inferential Conclusions
 
@@ -207,7 +234,7 @@ Limitations of the study include that a causal relationship cannot be introduced
 
 Tommy- Data Collection, Problem Statement, Additional Discussion, Tukey Code, Overall Writing and Code Check
 
-Gillian- Statistical Methods, Issues, ANOVA Code, Regression Code
+Gillian- Statistical Methods, Issues, ANOVA Code, Regression Code, Chi-Squared code
 
 Chris- Numerical Results, Inferential Conclusions, BoxPlot Code, Fisher's Code
 
@@ -221,14 +248,28 @@ crashprep <- function() {
   location <- read_csv("data/Crash_Data_14-20.csv")
   vehicle <- read_csv("data/Vehicle_Data_14-20.csv")
   rollups <- read_csv("data/Rollups_14-20.csv")
+  aadt <- read_csv("data/AADT_Unrounded.csv")
   
   location <- check_location(location)
   vehicle <- check_vehicle(vehicle)
   rollups <- check_rollups(rollups)
+  aadt <- check_aadt(aadt)
   
   crash <- left_join(location,rollups,by='crash_id')
-  crash <- left_join(crash,vehicle,by='crash_id')
-  rm("location","vehicle","rollups")
+  crash <- left_join(crash,vehicle,by='crash_id') %>%
+    filter(county_id == 49)
+  crash <- left_join(crash, aadt, by=c('route')) %>%
+    filter(milepoint >= START_ACCU, milepoint < END_ACCUM) %>% 
+    mutate(AADT = case_when(
+      grepl("2014",crash_datetime) == TRUE ~ AADT2014,
+      grepl("2015",crash_datetime) == TRUE ~ AADT2015,
+      grepl("2016",crash_datetime) == TRUE ~ AADT2016,
+      grepl("2017",crash_datetime) == TRUE ~ AADT2017,
+      grepl("2018",crash_datetime) == TRUE ~ AADT2018,
+      grepl("2019",crash_datetime) == TRUE ~ AADT2019,
+      grepl("2020",crash_datetime) == TRUE ~ AADT2020
+    ))
+  rm("location","vehicle","rollups", "aadt")
   
   crash
 }
@@ -294,8 +335,9 @@ check_location <- function(df){
            weather_condition_id = weather_condition_id, 
            manner_collision_id = manner_collision_id,
            roadway_surf_condition_id = roadway_surf_condition_id,
-           roadway_junct_feature_id = roadway_junct_feature_id, 
-           roadway_contrib_circum_id = roadway_contrib_circum_id)
+           route = route,
+           milepoint = milepoint,
+           county_id = county_id)
 }
 ```
 
@@ -307,10 +349,6 @@ check_vehicle <- function(df){
            vehicle_num = vehicle_num, 
            vehicle_year = vehicle_year,
            travel_direction_id = travel_direction_id, 
-           event_1_id = event_sequence_1_id, 
-           event_2_id = event_sequence_2_id, 
-           event_3_id = event_sequence_3_id, 
-           event_4_id = event_sequence_4_id,
            most_harmful_event_id = most_harmful_event_id, 
            vehicle_maneuver_id = vehicle_maneuver_id)
 }
@@ -327,39 +365,35 @@ check_rollups <- function(df){
            number_two_injuries = number_two_injuries,
            number_one_injuries = number_one_injuries,
            pedalcycle_involved = pedalcycle_involved, 
-           pedalcycle_involved_level4_tot = pedalcycle_involved_level4_tot,	
-           pedalcycle_involved_fatal_tot = pedalcycle_involved_fatal_tot,
-           pedestrian_involved = pedestrian_involved,	
-           pedestrian_involved_level4_tot = pedestrian_involved_level4_tot,	
-           pedestrian_involved_fatal_tot = pedestrian_involved_fatal_tot,
+           pedestrian_involved = pedestrian_involved,
            motorcycle_involved = motorcycle_involved,	
-           motorcycle_involved_level4_tot = motorcycle_involved_level4_tot,	
-           motorcycle_involved_fatal_tot = motorcycle_involved_fatal_tot,
-           unrestrained = unrestrained, 
-           dui = dui, 
-           aggressive_driving = aggressive_driving,	
-           distracted_driving = distracted_driving,	
-           drowsy_driving = drowsy_driving,	
+           distracted_driving = distracted_driving,
            speed_related = speed_related,
-           intersection_related = intersection_related,	
            adverse_weather = adverse_weather,	
            adverse_roadway_surf_condition = adverse_roadway_surf_condition,	
            roadway_geometry_related = roadway_geometry_related,
-           wild_animal_related = wild_animal_related,	
-           domestic_animal_related = domestic_animal_related,	
            roadway_departure = roadway_departure,	
            overturn_rollover = overturn_rollover,	
-           commercial_motor_veh_involved = commercial_motor_veh_involved,	
-           interstate_highway = interstate_highway,	
-           teen_driver_involved = teen_driver_involved,	
-           older_driver_involved = older_driver_involved,	
            route_type = route_type,	
            night_dark_condition = night_dark_condition,	
-           single_vehicle = single_vehicle,	
-           train_involved = train_involved,	
-           railroad_crossing = railroad_crossing,
-           transit_vehicle_involved = transit_vehicle_involved,	
-           collision_with_fixed_object = collision_with_fixed_object)
+           single_vehicle = single_vehicle)
 }
 ```
 
+``` {r}
+check_aadt <- function(df){
+  df %>%
+    mutate(route = RT_NUM) %>%
+    select(START_ACCU = START_ACCU,
+           END_ACCUM = END_ACCUM,
+           route,
+           AADT2020 = AADT2020,
+           AADT2019 = AADT2019,
+           AADT2018 = AADT2018,
+           AADT2017 = AADT2017,
+           AADT2016 = AADT2016,
+           AADT2015 = AADT2015,
+           AADT2014 = AADT2014,
+           DESC_ = DESC_)
+}
+```
